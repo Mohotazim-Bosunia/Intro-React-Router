@@ -1,5 +1,5 @@
 import React, { Suspense, useState } from "react";
-import { Link } from "react-router";
+import { Link, Navigate } from "react-router";
 import UserDetails2 from "../UsersDetails2/UserDetails2";
 
 const UserStyle = {
@@ -11,11 +11,16 @@ const UserStyle = {
 
 const User = ({ user }) => {
   const [showInfo, setShowInfo] = useState(false);
+  const [visitHome, setVisitHome] = useState(false);
   const { id, name, email, phone } = user;
 
   const userPromise = fetch(
     `https://jsonplaceholder.typicode.com/users/${id}`,
   ).then((res) => res.json());
+
+  if (visitHome) {
+    return <Navigate to="/"></Navigate>;
+  }
   return (
     <div style={UserStyle}>
       <h3>Name:{name}</h3>
@@ -32,6 +37,7 @@ const User = ({ user }) => {
           <UserDetails2 userPromise={userPromise}></UserDetails2>
         </Suspense>
       )}
+      <button onClick={() => setVisitHome(true)}>Visit Home</button>
     </div>
   );
 };
